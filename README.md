@@ -1,22 +1,20 @@
 # [dotty issue 18080](https://github.com/lampepfl/dotty/issues/18080) reproduction
 
-To demonstrate the issue:
+To demonstrate the issue, clone this repo, `cd` into it, then take the following steps:
 
-1. Clone this repo
-2. `cd` into it
-3. Wipe out all `target` directories -- `find . -name target -type d | xargs rm -rf`
-4. Run `sbt`
-5. From the `sbt` shell run `compile`
-6. Change [line 21 of `src/main/scala/database/Queries.scala`](src/main/scala/database/Queries.scala#L21). The change should have no affect on the signature or public-facing API:
+1. Wipe out all `target` directories -- `find . -name target -type d | xargs rm -rf`
+2. Run `sbt`
+3. From the `sbt` shell run `compile`
+4. Change [line 21 of `src/main/scala/database/Queries.scala`](src/main/scala/database/Queries.scala#L21). The change should have no affect on the signature or public-facing API:
     ```scala
     // before
     def call: String = s"AVG(${column.name})"
     // after
     def call: String = s"AVG2(${column.name})"
     ```
-7. Run `compile` again
+5. Run `compile` again
 
-On step 7, you will see output like this:
+On step 5, you will see output like this:
 
 ```
 [info] compiling 1 Scala source to /Users/matt/dotty-issue-18080/target/scala-3.3.1-RC2/classes ...
@@ -35,10 +33,14 @@ The sbt debug output shows that the only changes to the public-facing API of `Qu
 
 ![sbt api diff](https://github.com/lampepfl/dotty/assets/4718399/7b694a06-18af-4e10-a304-bac4cd3e5fcf)
 
-To view the debug output:
-
-1. Uncomment [lines 3 and 4 of `build.sbt`](build.sbt#L3-L4)
-2. Reload `sbt`
-3. Follow steps 3-7 above
+To view the debug output, exit `sbt` and re-run it with `SBT_DEBUG=1 sbt`, then follow the steps above again.
 
 You can find the changes to the API by searching the output for "[diff]" and looking for red/green text like in the screenshot above.
+
+## Test script
+
+I've also included a script to test whether the issue exists. You can run it with
+
+```bash
+./test.sh
+```
