@@ -1,4 +1,4 @@
-val scalaV = "3.3.1-RC1"
+val scalaV = "3.3.1-RC2"
 
 // ThisBuild / logLevel := Level.Debug
 // ThisBuild / incOptions ~= (_.withApiDebug(true).withRelationsDebug(true))
